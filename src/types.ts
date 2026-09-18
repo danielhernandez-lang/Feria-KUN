@@ -26,7 +26,7 @@ export interface AppUser {
 }
 
 export const OWNER_ADMIN_EMAIL = 'daniel_hernandez@cun.edu.co';
-export const OWNER_ADMIN_PASSWORD = 'z//pk**z//';
+export const OWNER_ADMIN_PASSWORD = '';
 
 export interface ExhibitorContact {
   email: string;
