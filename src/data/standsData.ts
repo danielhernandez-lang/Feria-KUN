@@ -4,7 +4,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
   {
     id: '01',
     standNumber: '01',
-    name: 'Andes BioTech & Nutrición',
+    name: 'Expositor 01A',
     slogan: 'Superalimentos bioactivos de origen andino con ciencia aplicada',
     category: 'Biotecnología & Alimentos',
     categoryColor: '#059669', // emerald
