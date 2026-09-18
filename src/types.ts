@@ -9,7 +9,7 @@ export type StandCategory =
   | 'AgroTech'
   | 'Salud & Mascotas'
   | 'Belleza & Cuidado Personal'
-  | 'Moda Sostenible'
+  | 'Moda y accesorios'
   | 'Logística & Transporte'
   | 'HealthTech & IA'
   | 'Alimentos & Bebidas'
