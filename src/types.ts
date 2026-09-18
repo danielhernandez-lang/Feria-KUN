@@ -8,7 +8,7 @@ export type StandCategory =
   | 'Energías Limpias'
   | 'AgroTech'
   | 'Salud & Mascotas'
-  | 'Belleza & Cuidado Personal'
+  | 'Belleza'
   | 'Moda y accesorios'
   | 'Logística & Transporte'
   | 'HealthTech & IA'
