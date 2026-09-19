@@ -5,7 +5,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     id: '01',
     standNumber: '01',
     name: 'Expositor 01A',
-    slogan: 'Superalimentos bioactivos de origen andino con ciencia aplicada',
+    slogan: 'Superalimentos bioactivos',
     category: 'Biotecnología & Alimentos',
     categoryColor: '#059669', // emerald
     badgeBg: '#ecfdf5',
