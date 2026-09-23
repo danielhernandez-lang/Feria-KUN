@@ -68,7 +68,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 02',
-    logoUrl: '/Logo_CUN.svg',
+    logoUrl: '',
   },
   {
     id: '03',
@@ -84,12 +84,12 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
       role: 'Fundador y Director General ',
       avatar: '',
     },
-    products: [],
+    products: ['Pines', 'Stickers'],
     contact: {
       phone: '3150682247',
       email: 'johantamayo470@gmail.com',
       website: '',
-      instagram: '@mr_pinstar',
+      instagram: '@pinstar.kit',
       tiktok: '',
       facebook: '',
       linkedin: '',
@@ -101,7 +101,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 03',
-    logoUrl: '/logos/mr_pinstar.svg',
+    logoUrl: 'https://drive.google.com/file/d/1FGIs64fC0-L6Gwroclpg4WqSisBQK6XF/view?usp=drive_link',
   },
   {
     id: '04',
@@ -268,7 +268,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     standNumber: '08',
     name: '',
     slogan: '',
-    category: '',
+    category: '' as any,
     categoryColor: '#65a30d',
     badgeBg: '#ecfccb',
     description: '',
@@ -563,7 +563,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
 
 export const BASE_EXHIBITORS: Exhibitor[] = INITIAL_EXHIBITORS;
 
-// Architectural coordinate mapping matching Plano v03.svg exactly
+// Architectural coordinate mapping matching floor plan furniture modules exactly
 export const STAND_COORDINATES: Record<string, StandCoordinates> = {
   '01': {
     id: '01',
@@ -571,15 +571,15 @@ export const STAND_COORDINATES: Record<string, StandCoordinates> = {
     y: 109,
     r: 16,
     label: '01',
-    zone: 'Ala Noroccidente - Entrada',
+    zone: 'Lounge Norte - Stand 01',
   },
   '02': {
     id: '02',
     x: 170,
-    y: 65,
+    y: 60,
     r: 16,
     label: '02',
-    zone: 'Zona Lounge Norte',
+    zone: 'Lounge Norte - Stand 02',
   },
   '03': {
     id: '03',
@@ -587,7 +587,7 @@ export const STAND_COORDINATES: Record<string, StandCoordinates> = {
     y: 185,
     r: 16,
     label: '03',
-    zone: 'Módulo Hexagonal Norte',
+    zone: 'Isla Hexagonal Norte - Stand 03',
   },
   '04': {
     id: '04',
@@ -595,7 +595,7 @@ export const STAND_COORDINATES: Record<string, StandCoordinates> = {
     y: 235,
     r: 16,
     label: '04',
-    zone: 'Módulo Hexagonal Sur',
+    zone: 'Isla Hexagonal Sur - Stand 04',
   },
   '05': {
     id: '05',
@@ -603,7 +603,7 @@ export const STAND_COORDINATES: Record<string, StandCoordinates> = {
     y: 210,
     r: 16,
     label: '05',
-    zone: 'Mesa Central 05',
+    zone: 'Isla Diamante 1 - Stand 05',
   },
   '06': {
     id: '06',
@@ -611,7 +611,7 @@ export const STAND_COORDINATES: Record<string, StandCoordinates> = {
     y: 290,
     r: 16,
     label: '06',
-    zone: 'Mesa Central 06',
+    zone: 'Isla Diamante 2 - Stand 06',
   },
   '07': {
     id: '07',
@@ -619,7 +619,7 @@ export const STAND_COORDINATES: Record<string, StandCoordinates> = {
     y: 370,
     r: 16,
     label: '07',
-    zone: 'Mesa Central 07',
+    zone: 'Isla Diamante 3 - Stand 07',
   },
   '08': {
     id: '08',
@@ -627,39 +627,39 @@ export const STAND_COORDINATES: Record<string, StandCoordinates> = {
     y: 450,
     r: 16,
     label: '08',
-    zone: 'Mesa Central 08',
+    zone: 'Isla Diamante 4 - Stand 08',
   },
   '09': {
     id: '09',
-    x: 583,
+    x: 580,
     y: 218,
     r: 16,
     label: '09',
-    zone: 'Ala Oriental - Módulo 09',
+    zone: 'Lounge Este - Stand 09',
   },
   '10': {
     id: '10',
-    x: 583,
+    x: 580,
     y: 285,
     r: 16,
     label: '10',
-    zone: 'Ala Oriental - Módulo 10',
+    zone: 'Lounge Este - Stand 10',
   },
   '11': {
     id: '11',
-    x: 583,
+    x: 580,
     y: 368,
     r: 16,
     label: '11',
-    zone: 'Ala Oriental - Módulo 11',
+    zone: 'Lounge Este - Stand 11',
   },
   '12': {
     id: '12',
-    x: 583,
+    x: 580,
     y: 435,
     r: 16,
     label: '12',
-    zone: 'Ala Oriental - Módulo 12',
+    zone: 'Lounge Este - Stand 12',
   },
   '13': {
     id: '13',
@@ -667,7 +667,7 @@ export const STAND_COORDINATES: Record<string, StandCoordinates> = {
     y: 517,
     r: 16,
     label: '13',
-    zone: 'Isla Central - Puesto 13',
+    zone: 'Estación Central - Stand 13',
   },
   '14': {
     id: '14',
@@ -675,15 +675,15 @@ export const STAND_COORDINATES: Record<string, StandCoordinates> = {
     y: 595,
     r: 16,
     label: '14',
-    zone: 'Isla Central - Puesto 14',
+    zone: 'Estación Central - Stand 14',
   },
   '15': {
     id: '15',
-    x: 563,
-    y: 640,
+    x: 575,
+    y: 660,
     r: 16,
     label: '15',
-    zone: 'Lounge Sur - Módulo 15',
+    zone: 'Lounge Sur - Stand 15',
   },
 };
 
@@ -706,7 +706,7 @@ export const RIGHT_LEGEND_ITEMS = [
   { id: '15', y: 718 },
 ];
 
-export const STORAGE_KEY = 'feria_emprendimiento_exhibitors_v5';
+export const STORAGE_KEY = 'feria_emprendimiento_exhibitors_v9';
 
 export function getStoredExhibitors(): Exhibitor[] {
   if (typeof window === 'undefined') return INITIAL_EXHIBITORS;
@@ -723,11 +723,13 @@ export function getStoredExhibitors(): Exhibitor[] {
     if (Array.isArray(parsed) && parsed.length > 0) {
       return parsed.map((item: Exhibitor) => {
         const init = INITIAL_EXHIBITORS.find((e) => e.id === item.id);
+        const normStand = (item.standNumber || item.id || '').trim().padStart(2, '0');
+        const defaultLogo = EXHIBITOR_DEFAULT_LOGOS[normStand] || EXHIBITOR_DEFAULT_LOGOS[item.standNumber] || init?.logoUrl;
         return {
           ...init,
           ...item,
-          category: (item.category !== undefined ? item.category : (init?.category || 'Moda y accesorios')) as Exhibitor['category'],
-          logoUrl: item.logoUrl || init?.logoUrl || EXHIBITOR_DEFAULT_LOGOS[item.id],
+          category: (item.category !== undefined ? item.category : (init?.category || '')) as Exhibitor['category'],
+          logoUrl: item.logoUrl || defaultLogo || init?.logoUrl,
           contact: {
             ...init?.contact,
             ...item.contact,

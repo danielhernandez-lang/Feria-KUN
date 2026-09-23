@@ -840,7 +840,7 @@ export const FloorPlanSvg: React.FC<FloorPlanSvgProps> = ({
 
               {/* Company name and logo preview snippet in legend */}
               {(() => {
-                const logoUrl = exhibitor ? resolveLogoUrl(exhibitor.logoUrl, item.id) : undefined;
+                const logoUrl = exhibitor ? resolveLogoUrl(exhibitor.logoUrl, item.id, exhibitor.name) : undefined;
                 if (!logoUrl) {
                   return (
                     exhibitor && (
@@ -977,7 +977,7 @@ export const FloorPlanSvg: React.FC<FloorPlanSvgProps> = ({
 
               {/* Floating brand logo badge on selection or hover */}
               {(isSelected || isHovered) && exhibitor && (() => {
-                const pinLogo = resolveLogoUrl(exhibitor.logoUrl, coord.id);
+                const pinLogo = resolveLogoUrl(exhibitor.logoUrl, coord.id, exhibitor.name);
                 if (!pinLogo) return null;
                 return (
                   <g transform={`translate(${coord.x - 14}, ${coord.y - 38})`} className="pointer-events-none">

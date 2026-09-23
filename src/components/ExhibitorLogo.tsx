@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Exhibitor } from '../types';
-import { EXHIBITOR_DEFAULT_LOGOS } from '../data/exhibitorLogos';
+import { EXHIBITOR_DEFAULT_LOGOS, EXHIBITOR_NAME_LOGOS } from '../data/exhibitorLogos';
 
 interface ExhibitorLogoProps {
   exhibitor: Partial<Exhibitor> & {
@@ -26,17 +26,20 @@ const SIZE_MAP = {
 
 /**
  * Resolves logo URLs supporting:
- * - Embedded high-fidelity base64 data URLs (instant, zero network latency)
- * - Local static paths (/logos/...)
- * - Direct filenames
- * - Google Drive links (prefers official embedded logo, falls back to direct lh3 URL)
- * - Default stand mapping fallback
+ * - Direct static files from /logos/... and /Logo_CUN.svg
+ * - Automatic mapping from standNumber or exhibitor name
+ * - User uploaded base64 data URLs
+ * - Graceful replacement of Google Drive links with the local logo file
  */
-export function resolveLogoUrl(url?: string, standNumber?: string): string | undefined {
+export function resolveLogoUrl(url?: string, standNumber?: string, name?: string): string | undefined {
   const normStand = (standNumber || '').trim().padStart(2, '0');
-  const defaultMapped = normStand
-    ? EXHIBITOR_DEFAULT_LOGOS[normStand] || EXHIBITOR_DEFAULT_LOGOS[standNumber?.replace(/^0+/, '') || '']
-    : undefined;
+  const bareStand = (standNumber || '').trim().replace(/^0+/, '');
+  const normName = (name || '').trim().toLowerCase();
+
+  const defaultMapped =
+    (normStand ? EXHIBITOR_DEFAULT_LOGOS[normStand] : undefined) ||
+    (bareStand ? EXHIBITOR_DEFAULT_LOGOS[bareStand] : undefined) ||
+    (normName ? EXHIBITOR_NAME_LOGOS[normName] : undefined);
 
   if (!url || !url.trim()) {
     return defaultMapped;
@@ -44,27 +47,28 @@ export function resolveLogoUrl(url?: string, standNumber?: string): string | und
 
   const trimmed = url.trim();
 
-  // If it's already a Data URL
+  // If it's a data URL uploaded by admin
   if (trimmed.startsWith('data:image/')) {
     return trimmed;
   }
 
-  // If it is a Google Drive link, prefer our high-fidelity embedded logo if available
-  const driveMatch = trimmed.match(/\/d\/([a-zA-Z0-9_-]+)/) || trimmed.match(/id=([a-zA-Z0-9_-]+)/);
-  if (driveMatch) {
-    if (defaultMapped) {
-      return defaultMapped;
-    }
-    return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+  // If it is a Google Drive link, always use our reliable local logo file
+  const isDrive = trimmed.includes('drive.google.com') || trimmed.includes('googleusercontent.com');
+  if (isDrive) {
+    return defaultMapped || trimmed;
   }
 
-  // If it's a bare filename or relative path
+  // If it's a bare filename without path
   if (/^([a-zA-Z0-9_\-\.\s]+)\.(jpg|jpeg|png|svg|webp)$/i.test(trimmed) && !trimmed.startsWith('/')) {
-    if (defaultMapped) return defaultMapped;
     return `/logos/${trimmed}`;
   }
 
-  return trimmed || defaultMapped;
+  // If it's already an absolute or relative path
+  if (trimmed.startsWith('/') || trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    return trimmed;
+  }
+
+  return defaultMapped || trimmed;
 }
 
 export const ExhibitorLogo: React.FC<ExhibitorLogoProps> = ({
@@ -74,11 +78,16 @@ export const ExhibitorLogo: React.FC<ExhibitorLogoProps> = ({
   showStandNumber = false,
 }) => {
   const normStand = (exhibitor.standNumber || '').trim().padStart(2, '0');
-  const defaultMapped = EXHIBITOR_DEFAULT_LOGOS[normStand] || EXHIBITOR_DEFAULT_LOGOS[exhibitor.standNumber?.replace(/^0+/, '') || ''];
+  const bareStand = (exhibitor.standNumber || '').trim().replace(/^0+/, '');
+  const normName = (exhibitor.name || '').trim().toLowerCase();
+  const defaultMapped =
+    (normStand ? EXHIBITOR_DEFAULT_LOGOS[normStand] : undefined) ||
+    (bareStand ? EXHIBITOR_DEFAULT_LOGOS[bareStand] : undefined) ||
+    (normName ? EXHIBITOR_NAME_LOGOS[normName] : undefined);
 
   const effectiveLogoUrl = useMemo(() => {
-    return resolveLogoUrl(exhibitor.logoUrl, exhibitor.standNumber);
-  }, [exhibitor.logoUrl, exhibitor.standNumber]);
+    return resolveLogoUrl(exhibitor.logoUrl, exhibitor.standNumber, exhibitor.name);
+  }, [exhibitor.logoUrl, exhibitor.standNumber, exhibitor.name]);
 
   const [currentSrc, setCurrentSrc] = useState<string | undefined>(effectiveLogoUrl);
   const [hasError, setHasError] = useState(false);
@@ -140,7 +149,7 @@ export const ExhibitorLogo: React.FC<ExhibitorLogoProps> = ({
 
       {showStandNumber && (
         <span
-          className="absolute -bottom-1 -right-1 px-1.5 py-0.2 rounded-md text-[10px] font-black shadow-xs border border-white text-white"
+          className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-md text-[9px] font-black text-white shadow-xs border border-white/60 leading-none"
           style={{ backgroundColor: categoryColor }}
         >
           {exhibitor.standNumber}
