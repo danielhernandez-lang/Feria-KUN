@@ -22,9 +22,12 @@ import {
   Armchair,
   Layers,
   Lock,
+  Quote,
+  ShieldCheck,
 } from 'lucide-react';
 import { Exhibitor } from '../types';
 import { STAND_COORDINATES } from '../data/standsData';
+import { ExhibitorLogo } from './ExhibitorLogo';
 
 interface ExhibitorDetailModalProps {
   exhibitor: Exhibitor | null;
@@ -81,131 +84,216 @@ export const ExhibitorDetailModal: React.FC<ExhibitorDetailModalProps> = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 320 }}
-          className="relative z-10 w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[90vh]"
+          className="relative z-10 w-full max-w-4xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[92vh]"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header Banner */}
           <div
-            className="relative px-6 pt-6 pb-6 text-white overflow-hidden transition-colors"
+            className="relative px-6 py-5 text-white overflow-hidden transition-colors"
             style={{
               background: `linear-gradient(135deg, ${exhibitor.categoryColor} 0%, #0f172a 120%)`,
             }}
           >
             {/* Background geometric accents */}
-            <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute top-0 right-0 p-4 flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleCopyLink}
-                title="Copiar datos del stand"
-                className="p-2 rounded-full bg-black/20 hover:bg-black/40 text-white/90 transition-colors backdrop-blur-sm"
-              >
-                {copied ? <Check className="w-4 h-4 text-emerald-300" /> : <Share2 className="w-4 h-4" />}
-              </button>
-              {isAdmin ? (
-                <button
-                  type="button"
-                  onClick={() => onEditExhibitor(exhibitor)}
-                  title="Editar información (Administrador)"
-                  className="p-2 rounded-full bg-black/20 hover:bg-black/40 text-white/90 transition-colors backdrop-blur-sm"
-                >
-                  <Edit3 className="w-4 h-4" />
-                </button>
-              ) : onRequestAdminLogin ? (
-                <button
-                  type="button"
-                  onClick={onRequestAdminLogin}
-                  title="Edición restringida al administrador"
-                  className="p-2 rounded-full bg-black/20 hover:bg-black/40 text-white/60 hover:text-white transition-colors backdrop-blur-sm"
-                >
-                  <Lock className="w-3.5 h-3.5" />
-                </button>
-              ) : null}
-              <button
-                type="button"
-                onClick={onClose}
-                title="Cerrar"
-                className="p-2 rounded-full bg-black/20 hover:bg-black/40 text-white/90 transition-colors backdrop-blur-sm"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+            <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
 
-            {/* Top Navigation between stands */}
-            <div className="flex items-center justify-between pr-28 text-xs text-white/80 mb-3">
-              <div className="flex items-center gap-1.5 font-medium">
-                <MapPin className="w-3.5 h-3.5" />
-                <span>{coord ? coord.zone : `Espacio ${exhibitor.standNumber}`}</span>
-              </div>
-              <div className="flex items-center gap-1 bg-black/20 px-2 py-1 rounded-full backdrop-blur-sm">
-                <button
-                  type="button"
-                  onClick={() => onSelectStand(prevStandId)}
-                  className="hover:text-white transition-colors p-0.5"
-                  title="Stand anterior"
-                >
-                  <ChevronLeft className="w-3.5 h-3.5" />
-                </button>
-                <span className="font-bold tracking-wider px-1">STAND {exhibitor.standNumber}</span>
-                <button
-                  type="button"
-                  onClick={() => onSelectStand(nextStandId)}
-                  className="hover:text-white transition-colors p-0.5"
-                  title="Stand siguiente"
-                >
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Stand Title & Slogan */}
-            <div className="flex items-start gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-white text-slate-900 font-extrabold text-2xl flex items-center justify-center shadow-lg border-2 border-white/30 shrink-0">
-                {exhibitor.standNumber}
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/20 text-white backdrop-blur-md mb-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                  {exhibitor.category}
+            {/* Top Toolbar: Navigation on left, actions on right (No overlapping) */}
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3.5 border-b border-white/15 relative z-10">
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/25 backdrop-blur-md text-xs font-medium text-white/90 border border-white/10">
+                  <MapPin className="w-3.5 h-3.5 text-amber-300" />
+                  <span>{coord ? coord.zone : `Espacio ${exhibitor.standNumber}`}</span>
                 </div>
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white truncate">
-                  {exhibitor.name}
+                <div className="flex items-center gap-1 bg-black/25 px-2.5 py-1 rounded-full backdrop-blur-md text-xs border border-white/10">
+                  <button
+                    type="button"
+                    onClick={() => onSelectStand(prevStandId)}
+                    className="hover:text-white text-white/80 transition-colors p-0.5"
+                    title="Stand anterior"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="font-bold tracking-wider px-1 text-white">STAND {exhibitor.standNumber}</span>
+                  <button
+                    type="button"
+                    onClick={() => onSelectStand(nextStandId)}
+                    className="hover:text-white text-white/80 transition-colors p-0.5"
+                    title="Stand siguiente"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  title="Copiar datos del stand"
+                  className="px-3 py-1.5 rounded-xl bg-black/25 hover:bg-black/40 text-white transition-colors backdrop-blur-sm border border-white/10 flex items-center gap-1.5 text-xs font-medium"
+                >
+                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <Share2 className="w-3.5 h-3.5" />}
+                  <span className="hidden sm:inline">{copied ? 'Copiado' : 'Compartir'}</span>
+                </button>
+                {isAdmin ? (
+                  <button
+                    type="button"
+                    onClick={() => onEditExhibitor(exhibitor)}
+                    title="Editar información (Administrador)"
+                    className="px-3 py-1.5 rounded-xl bg-black/25 hover:bg-black/40 text-white transition-colors backdrop-blur-sm border border-white/10 flex items-center gap-1.5 text-xs font-medium"
+                  >
+                    <Edit3 className="w-3.5 h-3.5 text-sky-300" />
+                    <span className="hidden sm:inline">Editar</span>
+                  </button>
+                ) : onRequestAdminLogin ? (
+                  <button
+                    type="button"
+                    onClick={onRequestAdminLogin}
+                    title="Edición restringida al administrador"
+                    className="px-3 py-1.5 rounded-xl bg-black/25 hover:bg-black/40 text-white/70 hover:text-white transition-colors backdrop-blur-sm border border-white/10 flex items-center gap-1.5 text-xs font-medium"
+                  >
+                    <Lock className="w-3.5 h-3.5 text-amber-300" />
+                    <span className="hidden sm:inline">Modo Consulta</span>
+                  </button>
+                ) : null}
+                <button
+                  type="button"
+                  onClick={onClose}
+                  title="Cerrar ventana"
+                  className="p-1.5 rounded-xl bg-black/25 hover:bg-black/40 text-white transition-colors backdrop-blur-sm border border-white/10"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Stand Title & Slogan Area */}
+            <div className="pt-4 flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-5 relative z-10">
+              <div className="flex items-center gap-3 shrink-0">
+                <ExhibitorLogo
+                  exhibitor={exhibitor}
+                  size="xl"
+                  showStandNumber={true}
+                  className="shadow-2xl ring-4 ring-white/30"
+                />
+                <div className="sm:hidden flex flex-col">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-white/70">
+                    Stand #{exhibitor.standNumber}
+                  </span>
+                  <span className="text-xs font-semibold text-white/90">
+                    {coord?.zone}
+                  </span>
+                </div>
+              </div>
+
+              <div className="min-w-0 flex-1 space-y-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 text-white backdrop-blur-md border border-white/15">
+                    <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                    {exhibitor.category}
+                  </div>
+                  <div className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-black/20 text-white/90 border border-white/10">
+                    <MapPin className="w-3 h-3 text-amber-300" />
+                    Stand #{exhibitor.standNumber}
+                  </div>
+                </div>
+
+                {/* Nombre del Emprendimiento (Visible al 100%, sin truncamiento) */}
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-tight">
+                  {exhibitor.name || `Stand #${exhibitor.standNumber} (Disponible)`}
                 </h2>
-                <p className="text-sm text-white/90 line-clamp-2 mt-0.5 font-normal">
-                  {exhibitor.slogan}
-                </p>
+
+                {/* Eslogan del Emprendimiento (Destacado y 100% visible) */}
+                {exhibitor.slogan ? (
+                  <div className="inline-flex items-start gap-2.5 px-4 py-2.5 rounded-2xl bg-black/30 backdrop-blur-md border border-white/20 text-white max-w-full shadow-inner">
+                    <Quote className="w-4 h-4 text-amber-300 shrink-0 mt-0.5 rotate-180" />
+                    <p className="text-sm sm:text-base font-medium italic leading-relaxed text-amber-50">
+                      «{exhibitor.slogan}»
+                    </p>
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
 
           {/* Scrollable Modal Body */}
           <div className="p-6 overflow-y-auto space-y-6 flex-1 text-slate-700">
-            {/* Description */}
-            <div>
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                Acerca del Emprendimiento
-              </h3>
-              <p className="text-sm leading-relaxed text-slate-600 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                {exhibitor.description}
-              </p>
-            </div>
+            {/* Emprendimiento & Slogan Overview Banner with Logo */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-50 via-blue-50/30 to-slate-50 border border-slate-200 shadow-2xs space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                  Identificación del Emprendimiento
+                </span>
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-200/80 text-slate-700">
+                  Stand #{exhibitor.standNumber} • {coord?.zone || 'Feria'}
+                </span>
+              </div>
 
-            {/* Founder Info & Category */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-sm">
-                  {exhibitor.founder.name
-                    .split(' ')
-                    .map((n) => n[0])
-                    .join('')
-                    .slice(0, 2)}
-                </div>
-                <div>
-                  <div className="text-xs text-slate-400 font-medium">Liderazgo & Equipo</div>
-                  <div className="text-sm font-semibold text-slate-800">{exhibitor.founder.name}</div>
-                  <div className="text-xs text-slate-500">{exhibitor.founder.role}</div>
+              <div className="flex items-center gap-3.5">
+                <ExhibitorLogo
+                  exhibitor={exhibitor}
+                  size="lg"
+                  className="ring-2 ring-slate-200/90 shrink-0"
+                />
+                <div className="min-w-0 flex-1">
+                  <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                    Marca Oficial
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug">
+                    {exhibitor.name || `Stand #${exhibitor.standNumber} (Disponible)`}
+                  </h3>
                 </div>
               </div>
+
+              {exhibitor.slogan ? (
+                <div className="pt-2.5 border-t border-slate-200/70 flex items-start gap-2">
+                  <Quote className="w-4 h-4 text-blue-600 shrink-0 mt-0.5 rotate-180" />
+                  <div>
+                    <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                      Eslogan Oficial
+                    </div>
+                    <p className="text-sm sm:text-base font-medium text-slate-800 italic leading-relaxed">
+                      "{exhibitor.slogan}"
+                    </p>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+
+            {/* Description */}
+            {exhibitor.description ? (
+              <div>
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                  Acerca del Emprendimiento
+                </h3>
+                <p className="text-sm leading-relaxed text-slate-600 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                  {exhibitor.description}
+                </p>
+              </div>
+            ) : null}
+
+            {/* Founder Info & Category */}
+            <div className={`grid grid-cols-1 ${exhibitor.founder?.name ? 'sm:grid-cols-2' : ''} gap-3`}>
+              {exhibitor.founder?.name ? (
+                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+                  <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-sm shrink-0">
+                    {exhibitor.founder.name
+                      .split(' ')
+                      .map((n) => n[0])
+                      .join('')
+                      .slice(0, 2)}
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-400 font-medium">Liderazgo & Equipo</div>
+                    <div className="text-sm font-semibold text-slate-800">{exhibitor.founder.name}</div>
+                    {exhibitor.founder.role && (
+                      <div className="text-xs text-slate-500">{exhibitor.founder.role}</div>
+                    )}
+                  </div>
+                </div>
+              ) : null}
 
               <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
                 <div
@@ -223,42 +311,52 @@ export const ExhibitorDetailModal: React.FC<ExhibitorDetailModalProps> = ({
             </div>
 
             {/* Featured Products / Services */}
-            <div>
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                Productos y Servicios Destacados
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                {exhibitor.products.map((prod, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3 rounded-xl bg-white border border-slate-200/80 hover:border-slate-300 transition-colors shadow-xs flex items-start gap-2"
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span className="text-xs font-medium text-slate-700 leading-snug">{prod}</span>
-                  </div>
-                ))}
+            {exhibitor.products && exhibitor.products.length > 0 && (
+              <div>
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                  Productos y Servicios Destacados
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {exhibitor.products.map((prod, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3 rounded-xl bg-white border border-slate-200/80 hover:border-slate-300 transition-colors shadow-xs flex items-start gap-2"
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <span className="text-xs font-medium text-slate-700 leading-snug">{prod}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Stand Amenities */}
-            <div>
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
-                <Armchair className="w-3.5 h-3.5 text-indigo-500" />
-                Equipamiento del Stand
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {exhibitor.amenities.map((item, idx) => (
-                  <span
-                    key={idx}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200"
-                  >
-                    <Zap className="w-3 h-3 text-amber-500" />
-                    {item}
+            {/* Stand Amenities (Equipamiento del Stand) - Visible exclusivamente para el usuario Administrador */}
+            {isAdmin && exhibitor.amenities && exhibitor.amenities.length > 0 && (
+              <div className="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100/90 shadow-2xs">
+                <div className="flex items-center justify-between flex-wrap gap-2 mb-2.5">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-950 flex items-center gap-1.5">
+                    <Armchair className="w-3.5 h-3.5 text-indigo-600" />
+                    Equipamiento del Stand
+                  </h3>
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-indigo-700 bg-indigo-100/80 px-2 py-0.5 rounded-full border border-indigo-200">
+                    <ShieldCheck className="w-3 h-3 text-indigo-600" />
+                    Solo Administrador
                   </span>
-                ))}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {exhibitor.amenities.map((item, idx) => (
+                    <span
+                      key={idx}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-medium bg-white text-indigo-900 border border-indigo-200/80 shadow-2xs"
+                    >
+                      <Zap className="w-3 h-3 text-amber-500" />
+                      {item}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Schedule / Agenda */}
             {exhibitor.schedule && exhibitor.schedule.length > 0 && (

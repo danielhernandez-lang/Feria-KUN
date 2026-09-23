@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { MapPin, ArrowUpRight, Zap, Sparkles, UserCheck, Edit3 } from 'lucide-react';
 import { Exhibitor } from '../types';
+import { ExhibitorLogo } from './ExhibitorLogo';
 
 interface ExhibitorCardViewProps {
   exhibitors: Exhibitor[];
@@ -27,26 +28,34 @@ export const ExhibitorCardView: React.FC<ExhibitorCardViewProps> = ({
           className="group bg-white rounded-3xl p-5 border border-slate-200/80 hover:border-slate-300 hover:shadow-md transition-all flex flex-col justify-between"
         >
           <div>
-            {/* Top row */}
+            {/* Top row with Exhibitor Logo */}
             <div className="flex items-start justify-between gap-3 mb-3">
-              <div className="flex items-center gap-2.5">
-                <div
-                  className="w-11 h-11 rounded-2xl flex items-center justify-center font-extrabold text-base text-white shadow-xs"
-                  style={{ backgroundColor: exhibitor.categoryColor }}
-                >
-                  {exhibitor.standNumber}
-                </div>
-                <div>
-                  <span
-                    className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-0.5"
-                    style={{
-                      backgroundColor: exhibitor.badgeBg,
-                      color: exhibitor.categoryColor,
-                    }}
-                  >
-                    {exhibitor.category}
-                  </span>
-                  <div className="text-xs text-slate-400 font-medium">Stand #{exhibitor.standNumber}</div>
+              <div className="flex items-center gap-3">
+                <ExhibitorLogo
+                  exhibitor={exhibitor}
+                  size="lg"
+                  showStandNumber={true}
+                  className="shrink-0 group-hover:scale-105 transition-transform ring-1 ring-slate-100 shadow-2xs"
+                />
+                <div className="min-w-0">
+                  {exhibitor.category ? (
+                    <span
+                      className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-0.5"
+                      style={{
+                        backgroundColor: exhibitor.badgeBg,
+                        color: exhibitor.categoryColor,
+                      }}
+                    >
+                      {exhibitor.category}
+                    </span>
+                  ) : (
+                    <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-0.5 bg-slate-100 text-slate-500">
+                      Disponible
+                    </span>
+                  )}
+                  <div className="text-xs text-slate-400 font-semibold">
+                    Stand #{exhibitor.standNumber}
+                  </div>
                 </div>
               </div>
 
@@ -74,16 +83,20 @@ export const ExhibitorCardView: React.FC<ExhibitorCardViewProps> = ({
 
             {/* Name and slogan */}
             <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">
-              {exhibitor.name}
+              {exhibitor.name || `Stand #${exhibitor.standNumber} (Disponible)`}
             </h3>
-            <p className="text-xs text-slate-500 line-clamp-2 mt-1 italic">
-              {exhibitor.slogan}
-            </p>
+            {exhibitor.slogan && (
+              <p className="text-xs text-slate-500 line-clamp-2 mt-1 italic">
+                {exhibitor.slogan}
+              </p>
+            )}
 
             {/* Description excerpt */}
-            <p className="text-xs text-slate-600 line-clamp-3 mt-2.5 leading-relaxed">
-              {exhibitor.description}
-            </p>
+            {exhibitor.description && (
+              <p className="text-xs text-slate-600 line-clamp-3 mt-2.5 leading-relaxed">
+                {exhibitor.description}
+              </p>
+            )}
 
             {/* Featured product badge */}
             {exhibitor.products && exhibitor.products.length > 0 && (
@@ -96,10 +109,12 @@ export const ExhibitorCardView: React.FC<ExhibitorCardViewProps> = ({
 
           {/* Bottom Card Actions */}
           <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-              <UserCheck className="w-3.5 h-3.5 text-slate-400" />
-              <span className="truncate max-w-[120px]">{exhibitor.founder.name}</span>
-            </div>
+            {exhibitor.founder?.name ? (
+              <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+                <UserCheck className="w-3.5 h-3.5 text-slate-400" />
+                <span className="truncate max-w-[120px]">{exhibitor.founder.name}</span>
+              </div>
+            ) : <div />}
 
             <button
               type="button"

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="pinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#312e81" flood-opacity="0.3" />
+    </filter>
+  </defs>
+  <circle cx="100" cy="100" r="92" fill="#ffffff" stroke="#4f46e5" stroke-width="4" filter="url(#shadow)" />
+  <circle cx="100" cy="100" r="82" fill="url(#pinGrad)" />
+  <!-- Star shape in center -->
+  <polygon points="100,38 116,74 155,77 125,102 134,141 100,120 66,141 75,102 45,77 84,74" fill="#fbbf24" stroke="#f59e0b" stroke-width="2" />
+  <circle cx="100" cy="100" r="14" fill="#ffffff" />
+  <text x="100" y="166" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="900" font-size="16" fill="#ffffff" letter-spacing="1">MR PIN STAR</text>
+  <text x="100" y="180" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="600" font-size="9" fill="#c7d2fe">PINES &amp; STICKERS</text>
+</svg>

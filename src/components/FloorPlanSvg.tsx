@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Exhibitor, StandCoordinates, FacilityType } from '../types';
 import { STAND_COORDINATES, RIGHT_LEGEND_ITEMS } from '../data/standsData';
+import { ExhibitorLogo, resolveLogoUrl } from './ExhibitorLogo';
 import cunLogoUrl from '../assets/Logo_CUN.svg';
 
 interface FloorPlanSvgProps {
@@ -837,20 +838,60 @@ export const FloorPlanSvg: React.FC<FloorPlanSvgProps> = ({
                 {item.id}
               </text>
 
-              {/* Company name preview snippet next to legend badge */}
-              {exhibitor && (
-                <text
-                  x={726}
-                  y={item.y + 4}
-                  fill={isSelected ? '#2563eb' : '#475569'}
-                  fontSize="12"
-                  fontWeight={isSelected ? '700' : '500'}
-                  fontFamily="system-ui, -apple-system, sans-serif"
-                  className="transition-colors"
-                >
-                  {exhibitor.name.length > 18 ? `${exhibitor.name.substring(0, 18)}…` : exhibitor.name}
-                </text>
-              )}
+              {/* Company name and logo preview snippet in legend */}
+              {(() => {
+                const logoUrl = exhibitor ? resolveLogoUrl(exhibitor.logoUrl, item.id) : undefined;
+                if (!logoUrl) {
+                  return (
+                    exhibitor && (
+                      <text
+                        x={726}
+                        y={item.y + 4}
+                        fill={isSelected ? '#2563eb' : '#475569'}
+                        fontSize="12"
+                        fontWeight={isSelected ? '700' : '500'}
+                        fontFamily="system-ui, -apple-system, sans-serif"
+                        className="transition-colors"
+                      >
+                        {exhibitor.name ? (exhibitor.name.length > 18 ? `${exhibitor.name.substring(0, 18)}…` : exhibitor.name) : `Stand ${item.id}`}
+                      </text>
+                    )
+                  );
+                }
+                return (
+                  <>
+                    <g transform={`translate(724, ${item.y - 11})`}>
+                      <rect
+                        width="22"
+                        height="22"
+                        rx="5"
+                        fill="#ffffff"
+                        stroke={isSelected ? exhibitor?.categoryColor || '#2563eb' : '#cbd5e1'}
+                        strokeWidth={isSelected ? '1.5' : '1'}
+                      />
+                      <image
+                        href={logoUrl}
+                        x="1"
+                        y="1"
+                        width="20"
+                        height="20"
+                        preserveAspectRatio="xMidYMid meet"
+                      />
+                    </g>
+                    <text
+                      x={752}
+                      y={item.y + 4}
+                      fill={isSelected ? '#2563eb' : '#334155'}
+                      fontSize="11.5"
+                      fontWeight={isSelected ? '700' : '500'}
+                      fontFamily="system-ui, -apple-system, sans-serif"
+                      className="transition-colors"
+                    >
+                      {exhibitor?.name ? (exhibitor.name.length > 15 ? `${exhibitor.name.substring(0, 15)}…` : exhibitor.name) : `Stand ${item.id}`}
+                    </text>
+                  </>
+                );
+              })()}
             </g>
           );
         })}
@@ -933,6 +974,33 @@ export const FloorPlanSvg: React.FC<FloorPlanSvgProps> = ({
               >
                 {coord.label}
               </text>
+
+              {/* Floating brand logo badge on selection or hover */}
+              {(isSelected || isHovered) && exhibitor && (() => {
+                const pinLogo = resolveLogoUrl(exhibitor.logoUrl, coord.id);
+                if (!pinLogo) return null;
+                return (
+                  <g transform={`translate(${coord.x - 14}, ${coord.y - 38})`} className="pointer-events-none">
+                    <rect
+                      width="28"
+                      height="28"
+                      rx="8"
+                      fill="#ffffff"
+                      stroke={exhibitor.categoryColor || '#2563eb'}
+                      strokeWidth="2"
+                      filter="url(#badgeShadow)"
+                    />
+                    <image
+                      href={pinLogo}
+                      x="2"
+                      y="2"
+                      width="24"
+                      height="24"
+                      preserveAspectRatio="xMidYMid meet"
+                    />
+                  </g>
+                );
+              })()}
             </g>
           );
         })}
@@ -946,24 +1014,35 @@ export const FloorPlanSvg: React.FC<FloorPlanSvgProps> = ({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.15 }}
-            className="absolute pointer-events-none z-20 bg-slate-900/95 text-white text-xs px-3 py-2 rounded-xl shadow-xl border border-slate-700/80 backdrop-blur-md max-w-xs"
+            className="absolute pointer-events-none z-20 bg-slate-900/95 text-white text-xs p-3 rounded-2xl shadow-2xl border border-slate-700/80 backdrop-blur-md max-w-xs"
             style={{
               left: `${Math.min(Math.max((hoveredCoord.x / 920) * 100, 10), 85)}%`,
               top: `${Math.max((hoveredCoord.y / 1020) * 100 - 9, 4)}%`,
               transform: 'translate(-50%, -100%)',
             }}
           >
-            <div className="flex items-center gap-1.5 font-semibold text-sky-400">
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: hoveredExhibitor.categoryColor }} />
-              Stand {hoveredExhibitor.standNumber} • {hoveredExhibitor.category}
+            <div className="flex items-center gap-2.5 mb-1.5">
+              <ExhibitorLogo
+                exhibitor={hoveredExhibitor}
+                size="sm"
+                className="shrink-0 ring-1 ring-white/20"
+              />
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5 font-semibold text-sky-400 text-[10px]">
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: hoveredExhibitor.categoryColor }} />
+                  Stand {hoveredExhibitor.standNumber} • {hoveredExhibitor.category}
+                </div>
+                <div className="font-bold text-white text-xs truncate leading-tight">{hoveredExhibitor.name}</div>
+              </div>
             </div>
-            <div className="font-bold text-white text-sm mt-0.5 leading-tight">{hoveredExhibitor.name}</div>
-            <div className="text-slate-300 text-[11px] mt-0.5 line-clamp-1 italic">
-              {hoveredExhibitor.slogan}
-            </div>
-            <div className="text-slate-400 text-[10px] mt-1 flex items-center justify-between border-t border-slate-700/60 pt-1">
+            {hoveredExhibitor.slogan && (
+              <div className="text-slate-300 text-[11px] line-clamp-1 italic mb-1">
+                «{hoveredExhibitor.slogan}»
+              </div>
+            )}
+            <div className="text-slate-400 text-[10px] flex items-center justify-between border-t border-slate-700/60 pt-1">
               <span>{hoveredCoord.zone}</span>
-              <span className="text-sky-300 font-medium">Click para ver más</span>
+              <span className="text-sky-300 font-medium">Click para ver ficha</span>
             </div>
           </motion.div>
         )}

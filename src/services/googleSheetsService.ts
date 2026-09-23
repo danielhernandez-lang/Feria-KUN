@@ -423,7 +423,14 @@ export async function updateGoogleSheetsWithApi(
 }
 
 function normalizeCategory(cat: string): StandCategory {
-  const c = (cat || '').toLowerCase();
+  const c = (cat || '').toLowerCase().trim();
+  if (c.includes('video') || c.includes('juego') || c.includes('game')) return 'Video juegos';
+  if (c.includes('mascota') || c.includes('pet')) return 'Mascotas';
+  if (c.includes('regalo') || c.includes('detalle') || c.includes('mathu')) return 'Regalos y detalles';
+  if (c.includes('cun') || c.includes('institucional')) return 'CUN Institucional';
+  if (c.includes('innova') || c.includes('servicio')) return 'Innovación & Servicios';
+  if (c.includes('belleza') || c.includes('facial') || c.includes('skincare')) return 'Belleza';
+  if (c.includes('moda') || c.includes('accesorio') || c.includes('ropa') || c.includes('pin')) return 'Moda y accesorios';
   if (c.includes('bio') || c.includes('alim')) return 'Biotecnología & Alimentos';
   if (c.includes('gastro') || c.includes('agro')) return 'Gastronomía & Agro';
   if (c.includes('software') || (c.includes('edtech') && c.includes('soft'))) return 'EdTech & Software';
@@ -431,14 +438,12 @@ function normalizeCategory(cat: string): StandCategory {
   if (c.includes('fin')) return 'FinTech';
   if (c.includes('sostenib') || c.includes('diseño')) return 'Sostenibilidad & Diseño';
   if (c.includes('energ')) return 'Energías Limpias';
-  if (c.includes('salud') || c.includes('mascota')) return 'Salud & Mascotas';
-  if (c.includes('belleza') || c.includes('cuidado')) return 'Belleza & Cuidado Personal';
-  if (c.includes('moda')) return 'Moda Sostenible';
+  if (c.includes('salud')) return 'Salud & Mascotas';
   if (c.includes('logíst') || c.includes('transp')) return 'Logística & Transporte';
   if (c.includes('health') || c.includes('ia')) return 'HealthTech & IA';
   if (c.includes('bebida')) return 'Alimentos & Bebidas';
   if (c.includes('arq') || c.includes('hábitat')) return 'Arquitectura & Hábitat';
-  return 'EdTech & Software';
+  return 'Moda y accesorios';
 }
 
 function getCategoryColor(category: string): string {

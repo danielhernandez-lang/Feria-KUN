@@ -20,8 +20,11 @@ import {
   Mail,
   Armchair,
   Layers,
+  Upload,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { Exhibitor, StandCategory, ExhibitorScheduleItem } from '../types';
+import { ExhibitorLogo } from './ExhibitorLogo';
 
 interface EditExhibitorModalProps {
   exhibitor: Exhibitor | null;
@@ -32,6 +35,13 @@ interface EditExhibitorModalProps {
 }
 
 const CATEGORIES: { label: StandCategory; color: string; badgeBg: string }[] = [
+  { label: 'Moda y accesorios', color: '#9333ea', badgeBg: '#f3e8ff' },
+  { label: 'Belleza', color: '#db2777', badgeBg: '#fce7f3' },
+  { label: 'Video juegos', color: '#0284c7', badgeBg: '#e0f2fe' },
+  { label: 'Mascotas', color: '#2563eb', badgeBg: '#dbeafe' },
+  { label: 'Regalos y detalles', color: '#0d9488', badgeBg: '#ccfbf1' },
+  { label: 'CUN Institucional', color: '#d97706', badgeBg: '#fef3c7' },
+  { label: 'Innovación & Servicios', color: '#65a30d', badgeBg: '#ecfccb' },
   { label: 'Biotecnología & Alimentos', color: '#059669', badgeBg: '#ecfdf5' },
   { label: 'Gastronomía & Agro', color: '#d97706', badgeBg: '#fef3c7' },
   { label: 'EdTech & Software', color: '#4f46e5', badgeBg: '#e0e7ff' },
@@ -41,8 +51,6 @@ const CATEGORIES: { label: StandCategory; color: string; badgeBg: string }[] = [
   { label: 'Energías Limpias', color: '#ea580c', badgeBg: '#ffedd5' },
   { label: 'AgroTech', color: '#65a30d', badgeBg: '#ecfccb' },
   { label: 'Salud & Mascotas', color: '#e11d48', badgeBg: '#ffe4e6' },
-  { label: 'Belleza & Cuidado Personal', color: '#db2777', badgeBg: '#fce7f3' },
-  { label: 'Moda Sostenible', color: '#9333ea', badgeBg: '#f3e8ff' },
   { label: 'Logística & Transporte', color: '#0284c7', badgeBg: '#e0f2fe' },
   { label: 'HealthTech & IA', color: '#3b82f6', badgeBg: '#dbeafe' },
   { label: 'Alimentos & Bebidas', color: '#8b5cf6', badgeBg: '#ede9fe' },
@@ -183,12 +191,12 @@ export const EditExhibitorModal: React.FC<EditExhibitorModalProps> = ({
           {/* Header */}
           <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              <div
-                className="w-10 h-10 rounded-xl text-white font-extrabold flex items-center justify-center text-sm shadow-xs border border-white/20"
-                style={{ backgroundColor: formData.categoryColor }}
-              >
-                {formData.standNumber}
-              </div>
+              <ExhibitorLogo
+                exhibitor={formData}
+                size="md"
+                showStandNumber={true}
+                className="shrink-0 ring-1 ring-white/20"
+              />
               <div>
                 <h2 className="text-base font-bold flex items-center gap-2">
                   <span>Editar Expositor - Stand {formData.standNumber}</span>
@@ -350,17 +358,80 @@ export const EditExhibitorModal: React.FC<EditExhibitorModalProps> = ({
                   </div>
                 </div>
 
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">
-                    URL del Logo o Emblema (opcional)
-                  </label>
-                  <input
-                    type="url"
-                    value={formData.logoUrl || ''}
-                    onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
-                    placeholder="https://..."
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 font-mono"
-                  />
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="block font-semibold text-slate-700 text-xs uppercase tracking-wider">
+                      Logo o Emblema del Expositor
+                    </label>
+                    {formData.logoUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, logoUrl: '' })}
+                        className="text-[11px] text-red-600 hover:text-red-700 font-semibold"
+                      >
+                        Remover logo
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <ExhibitorLogo
+                      exhibitor={{
+                        ...formData,
+                        id: formData.id || 'preview',
+                        standNumber: formData.standNumber || '00',
+                        categoryColor: formData.categoryColor || '#2563eb',
+                        badgeBg: formData.badgeBg || '#dbeafe',
+                        name: formData.name || 'Emprendimiento',
+                        category: formData.category || 'EdTech & Software',
+                        slogan: formData.slogan || '',
+                        description: formData.description || '',
+                        spaceType: formData.spaceType || '',
+                        contact: formData.contact || {},
+                        products: formData.products || [],
+                        amenities: formData.amenities || [],
+                        schedule: formData.schedule || [],
+                        logoUrl: formData.logoUrl,
+                      }}
+                      size="lg"
+                      className="shrink-0 ring-2 ring-slate-300"
+                    />
+
+                    <div className="flex-1 space-y-2">
+                      <input
+                        type="url"
+                        value={formData.logoUrl || ''}
+                        onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
+                        placeholder="URL de imagen (https://... o svg data:...)"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 text-xs font-mono"
+                      />
+
+                      <div className="flex items-center gap-2">
+                        <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-xs font-semibold cursor-pointer shadow-2xs transition-colors">
+                          <Upload className="w-3.5 h-3.5 text-blue-600" />
+                          <span>Subir desde el equipo</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const reader = new FileReader();
+                                reader.onload = () => {
+                                  if (typeof reader.result === 'string') {
+                                    setFormData({ ...formData, logoUrl: reader.result });
+                                  }
+                                };
+                                reader.readAsDataURL(file);
+                              }
+                            }}
+                          />
+                        </label>
+                        <span className="text-[11px] text-slate-400">PNG, JPG, SVG o WebP</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

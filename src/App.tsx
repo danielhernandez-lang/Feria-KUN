@@ -17,6 +17,7 @@ import {
   Eye,
   Lock,
   FileSpreadsheet,
+  RotateCcw,
 } from 'lucide-react';
 import {
   Exhibitor,
@@ -36,6 +37,7 @@ import { FloorPlanControls } from './components/FloorPlanControls';
 import { ExhibitorDetailModal } from './components/ExhibitorDetailModal';
 import { EditExhibitorModal } from './components/EditExhibitorModal';
 import { ExhibitorCardView } from './components/ExhibitorCardView';
+import { ExhibitorLogo } from './components/ExhibitorLogo';
 import { CunLogo } from './components/CunLogo';
 import { GoogleSheetsModal } from './components/GoogleSheetsModal';
 import { AdminAuthModal } from './components/AdminAuthModal';
@@ -129,7 +131,12 @@ export default function App() {
   // Categories list
   const categories = useMemo(() => {
     const set = new Set<string>();
-    exhibitors.forEach((e) => set.add(e.category));
+    exhibitors.forEach((e) => {
+      const cat = (e.category || '').trim();
+      if (cat) {
+        set.add(cat);
+      }
+    });
     return Array.from(set);
   }, [exhibitors]);
 
@@ -141,17 +148,17 @@ export default function App() {
         const term = searchTerm.toLowerCase().trim();
         const matchesNum =
           exhibitor.standNumber.includes(term) || `stand ${exhibitor.standNumber}`.includes(term);
-        const matchesName = exhibitor.name.toLowerCase().includes(term);
-        const matchesCat = exhibitor.category.toLowerCase().includes(term);
-        const matchesFounder = exhibitor.founder.name.toLowerCase().includes(term);
-        const matchesProducts = exhibitor.products.some((p) => p.toLowerCase().includes(term));
+        const matchesName = (exhibitor.name || '').toLowerCase().includes(term);
+        const matchesCat = (exhibitor.category || '').toLowerCase().includes(term);
+        const matchesFounder = (exhibitor.founder?.name || '').toLowerCase().includes(term);
+        const matchesProducts = (exhibitor.products || []).some((p) => p.toLowerCase().includes(term));
         if (!(matchesNum || matchesName || matchesCat || matchesFounder || matchesProducts)) {
           return false;
         }
       }
 
       // Category filter
-      if (selectedCategory && exhibitor.category !== selectedCategory) {
+      if (selectedCategory && (exhibitor.category || '').trim() !== selectedCategory.trim()) {
         return false;
       }
 
@@ -223,6 +230,22 @@ export default function App() {
     saveStoredExhibitors(newExhibitors);
   };
 
+  const handleLoadDefaultExhibitors = () => {
+    if (!isAdmin) {
+      showToast('Acceso denegado: Solo el administrador puede cargar la información por defecto.');
+      setIsAdminAuthModalOpen(true);
+      return;
+    }
+    const confirmed = window.confirm(
+      '¿Deseas cargar la información actual de los expositores como información inicial por defecto?\n\nEsto restablecerá los 15 stands con todos los nombres de marcas, eslóganes, categorías, logos SVG oficiales y configuración de la feria.'
+    );
+    if (confirmed) {
+      setExhibitors(INITIAL_EXHIBITORS);
+      saveStoredExhibitors(INITIAL_EXHIBITORS);
+      showToast('Información actual cargada exitosamente como información inicial por defecto.');
+    }
+  };
+
   const handlePrint = () => {
     window.print();
   };
@@ -278,20 +301,37 @@ export default function App() {
               </button>
             )}
 
-            <button
-              type="button"
-              onClick={() => setIsSheetsModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300/80 text-xs font-bold shadow-xs transition-colors"
-              title="Sincronizar o exportar con Google Sheets"
-            >
-              <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
-              <span>Google Sheets</span>
-            </button>
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={() => setIsSheetsModalOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300/80 text-xs font-bold shadow-xs transition-colors"
+                title="Sincronizar o exportar con Google Sheets"
+              >
+                <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
+                <span>Google Sheets</span>
+              </button>
+            )}
 
-            <div className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-700">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>100% Ocupación</span>
-            </div>
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={handleLoadDefaultExhibitors}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-xs font-bold shadow-xs transition-colors"
+                title="Cargar la información actual de los expositores como información inicial por defecto"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-indigo-600" />
+                <span className="hidden lg:inline">Cargar Info Inicial por Defecto</span>
+                <span className="lg:hidden">Por Defecto</span>
+              </button>
+            )}
+
+            {isAdmin && (
+              <div className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-700">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>100% Ocupación</span>
+              </div>
+            )}
 
             {selectedExhibitor && (
               <button
@@ -352,7 +392,7 @@ export default function App() {
           onZoomOut={handleZoomOut}
           onResetZoom={handleResetZoom}
           onPrint={handlePrint}
-          onOpenSheets={() => setIsSheetsModalOpen(true)}
+          onOpenSheets={isAdmin ? () => setIsSheetsModalOpen(true) : undefined}
           totalStands={exhibitors.length}
           matchingCount={filteredExhibitors.length}
         />
@@ -414,27 +454,33 @@ export default function App() {
               {selectedExhibitor ? (
                 <div className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
                   <div>
-                    {/* Header with stand badge and zone */}
+                    {/* Header with exhibitor logo, stand badge and zone */}
                     <div className="flex items-start justify-between gap-2 mb-3">
-                      <div className="flex items-center gap-2.5">
-                        <div
-                          className="w-12 h-12 rounded-2xl text-white font-extrabold text-lg flex items-center justify-center shadow-xs"
-                          style={{ backgroundColor: selectedExhibitor.categoryColor }}
-                        >
-                          {selectedExhibitor.standNumber}
-                        </div>
-                        <div>
-                          <span
-                            className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-0.5"
-                            style={{
-                              backgroundColor: selectedExhibitor.badgeBg,
-                              color: selectedExhibitor.categoryColor,
-                            }}
-                          >
-                            {selectedExhibitor.category}
-                          </span>
+                      <div className="flex items-center gap-3">
+                        <ExhibitorLogo
+                          exhibitor={selectedExhibitor}
+                          size="lg"
+                          showStandNumber={true}
+                          className="shrink-0 ring-2 ring-slate-100 shadow-sm"
+                        />
+                        <div className="min-w-0">
+                          {selectedExhibitor.category ? (
+                            <span
+                              className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-0.5"
+                              style={{
+                                backgroundColor: selectedExhibitor.badgeBg,
+                                color: selectedExhibitor.categoryColor,
+                              }}
+                            >
+                              {selectedExhibitor.category}
+                            </span>
+                          ) : (
+                            <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-0.5 bg-slate-100 text-slate-500">
+                              Disponible
+                            </span>
+                          )}
                           <div className="text-xs font-semibold text-slate-400">
-                            {STAND_COORDINATES[selectedExhibitor.id]?.zone}
+                            Stand #{selectedExhibitor.standNumber} • {STAND_COORDINATES[selectedExhibitor.id]?.zone}
                           </div>
                         </div>
                       </div>
@@ -462,39 +508,47 @@ export default function App() {
                     </div>
 
                     <h2 className="text-lg font-bold text-slate-900 leading-snug">
-                      {selectedExhibitor.name}
+                      {selectedExhibitor.name || `Stand #${selectedExhibitor.standNumber} (Disponible)`}
                     </h2>
-                    <p className="text-xs text-slate-500 italic mt-0.5">
-                      {selectedExhibitor.slogan}
-                    </p>
+                    {selectedExhibitor.slogan && (
+                      <p className="text-xs text-slate-500 italic mt-0.5">
+                        {selectedExhibitor.slogan}
+                      </p>
+                    )}
 
                     {/* Excerpt */}
-                    <p className="text-xs text-slate-600 mt-3 leading-relaxed line-clamp-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                      {selectedExhibitor.description}
-                    </p>
+                    {selectedExhibitor.description && (
+                      <p className="text-xs text-slate-600 mt-3 leading-relaxed line-clamp-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        {selectedExhibitor.description}
+                      </p>
+                    )}
 
                     {/* Products list preview */}
-                    <div className="mt-3.5 space-y-1.5">
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                        Productos Destacados
+                    {selectedExhibitor.products && selectedExhibitor.products.length > 0 && (
+                      <div className="mt-3.5 space-y-1.5">
+                        <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                          Productos Destacados
+                        </div>
+                        <div className="space-y-1">
+                          {selectedExhibitor.products.slice(0, 3).map((p, i) => (
+                            <div key={i} className="flex items-center gap-1.5 text-xs text-slate-700">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                              <span className="truncate">{p}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                      <div className="space-y-1">
-                        {selectedExhibitor.products.slice(0, 2).map((p, i) => (
-                          <div key={i} className="flex items-center gap-1.5 text-xs text-slate-700">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                            <span className="truncate">{p}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    )}
 
                     {/* Founder */}
-                    <div className="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                      <span className="text-slate-400">Fundador:</span>
-                      <span className="font-semibold text-slate-800">
-                        {selectedExhibitor.founder.name}
-                      </span>
-                    </div>
+                    {selectedExhibitor.founder?.name && (
+                      <div className="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span className="text-slate-400">Fundador:</span>
+                        <span className="font-semibold text-slate-800">
+                          {selectedExhibitor.founder.name}
+                        </span>
+                      </div>
+                    )}
 
                     {/* Next Schedule item */}
                     {selectedExhibitor.schedule && selectedExhibitor.schedule[0] && (

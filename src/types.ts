@@ -1,19 +1,12 @@
 export type StandCategory =
-  | 'Biotecnología & Alimentos'
-  | 'Gastronomía & Agro'
-  | 'EdTech & Software'
-  | 'EdTech & Hardware'
-  | 'FinTech'
-  | 'Sostenibilidad & Diseño'
-  | 'Energías Limpias'
-  | 'AgroTech'
-  | 'Salud & Mascotas'
-  | 'Belleza'
   | 'Moda y accesorios'
-  | 'Logística & Transporte'
-  | 'HealthTech & IA'
-  | 'Alimentos & Bebidas'
-  | 'Arquitectura & Hábitat';
+  | 'CUN Institucional'
+  | 'Video juegos'
+  | 'Video juegos '
+  | 'Mascotas'
+  | 'Regalos y detalles'
+  | 'Belleza'
+  | (string & {});
 
 export type UserRole = 'admin' | 'viewer';
 
