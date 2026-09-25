@@ -841,7 +841,8 @@ export const FloorPlanSvg: React.FC<FloorPlanSvgProps> = ({
               {/* Company name and logo preview snippet in legend */}
               {(() => {
                 const logoUrl = exhibitor ? resolveLogoUrl(exhibitor.logoUrl, item.id, exhibitor.name) : undefined;
-                if (!logoUrl) {
+                const safeLogoUrl = logoUrl ? encodeURI(logoUrl) : undefined;
+                if (!safeLogoUrl) {
                   return (
                     exhibitor && (
                       <text
@@ -870,7 +871,8 @@ export const FloorPlanSvg: React.FC<FloorPlanSvgProps> = ({
                         strokeWidth={isSelected ? '1.5' : '1'}
                       />
                       <image
-                        href={logoUrl}
+                        href={safeLogoUrl}
+                        xlinkHref={safeLogoUrl}
                         x="1"
                         y="1"
                         width="20"
@@ -979,6 +981,7 @@ export const FloorPlanSvg: React.FC<FloorPlanSvgProps> = ({
               {(isSelected || isHovered) && exhibitor && (() => {
                 const pinLogo = resolveLogoUrl(exhibitor.logoUrl, coord.id, exhibitor.name);
                 if (!pinLogo) return null;
+                const safePinLogo = encodeURI(pinLogo);
                 return (
                   <g transform={`translate(${coord.x - 14}, ${coord.y - 38})`} className="pointer-events-none">
                     <rect
@@ -991,7 +994,8 @@ export const FloorPlanSvg: React.FC<FloorPlanSvgProps> = ({
                       filter="url(#badgeShadow)"
                     />
                     <image
-                      href={pinLogo}
+                      href={safePinLogo}
+                      xlinkHref={safePinLogo}
                       x="2"
                       y="2"
                       width="24"

@@ -6,14 +6,14 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     id: '01',
     standNumber: '01',
     name: 'JOB Store',
-    slogan: 'Moda y accesorios',
+    slogan: '',
     category: 'Moda y accesorios',
     categoryColor: '#059669',
     badgeBg: '#ecfdf5',
     description: 'Ropa para dama, Blusas y Bodys ',
     founder: {
       name: 'Natalia Ramírez ',
-      role: 'Fundadora',
+      role: '',
       avatar: '',
     },
     products: ['Ropa para dama', 'Blusas', 'Bodys '],
@@ -34,17 +34,17 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 01',
-    logoUrl: 'https://drive.google.com/file/d/1EJN_k0X3bfeyULGoYyLNAOBLOn9nVuSY/view?usp=drive_link',
+    logoUrl: '/logos/job_store.jpg',
   },
   {
     id: '02',
     standNumber: '02',
     name: 'Vinculaciones CUN',
-    slogan: 'Conoce a CUN y sus programas académicos',
+    slogan: '',
     category: 'CUN Institucional',
     categoryColor: '#d97706',
     badgeBg: '#fef3c7',
-    description: 'Equipo de vinculaciones CUN para oferta de pregrados y posgrados',
+    description: '',
     founder: {
       name: 'Luz ',
       role: '',
@@ -68,7 +68,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 02',
-    logoUrl: '',
+    logoUrl: '/Logo_CUN.svg',
   },
   {
     id: '03',
@@ -81,7 +81,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     description: 'Vendemos Sticker Pines que hablan por nuestros clientes.',
     founder: {
       name: 'Johan Tamayo ',
-      role: 'Fundador y Director General ',
+      role: '',
       avatar: '',
     },
     products: ['Pines', 'Stickers'],
@@ -101,7 +101,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 03',
-    logoUrl: 'https://drive.google.com/file/d/1FGIs64fC0-L6Gwroclpg4WqSisBQK6XF/view?usp=drive_link',
+    logoUrl: '/logos/PinStar.jpg',
   },
   {
     id: '04',
@@ -115,7 +115,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
       'El emprendimiento lleva a la venta video juegos, consolas, controles, accesorios, video juegos nuevos y retro; adiccional tenemos tambien el tema de servicio técnico.',
     founder: {
       name: 'Geraldine Yanguatin Sierra',
-      role: 'Fundadora',
+      role: '',
       avatar: '',
     },
     products: [
@@ -141,20 +141,20 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 04',
-    logoUrl: 'https://drive.google.com/file/d/1TJYYId258ZUc8Bv2_mXbE8jB_F5UOoCj/view?usp=drive_link',
+    logoUrl: '/logos/RealGamesStore.jpg',
   },
   {
     id: '05',
     standNumber: '05',
     name: 'San Geronimo Pets',
-    slogan: 'Juguetes para perros y gatos, Snacks para perros, Cajas con 5 artículos para perros',
+    slogan: '',
     category: 'Mascotas',
     categoryColor: '#2563eb',
     badgeBg: '#dbeafe',
     description: 'Venta de accesorios para mascotas',
     founder: {
       name: 'Carolina Bolaños',
-      role: 'Fundadora',
+      role: '',
       avatar: '',
     },
     products: [
@@ -178,7 +178,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 05',
-    logoUrl: 'https://drive.google.com/file/d/15vt31Ock1ePMwdLSdV0aJv49dYtdFUYL/view?usp=drive_link',
+    logoUrl: '/logos/san_geronimo_pets.jpg',
   },
   {
     id: '06',
@@ -192,7 +192,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
       'El emprendimiento ofrece detalles y decoraciones donde maneja anchetas, desayunos, cajas dulcesas, pines en foamy, rosas eternas y diferentes cajas personalizadas',
     founder: {
       name: 'Paula Vanessa Gil Chaparro',
-      role: 'Fundadora',
+      role: '',
       avatar: '',
     },
     products: [
@@ -219,7 +219,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 06',
-    logoUrl: 'https://drive.google.com/file/d/1FfeW3mdQyFOAwn2D0rE2o8bWM2lEzU7c/view?usp=drive_link',
+    logoUrl: '/logos/Mathu.jpg',
   },
   {
     id: '07',
@@ -233,7 +233,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
       'Es una marca colombiana de ropa para bebés de 0 a 36 meses, creada para acompañar cada etapa con comodidad, suavidad y estilo, con diseños pensados para el día a día de los pequeños.',
     founder: {
       name: 'Estefany Castañeda',
-      role: 'Fundadora',
+      role: '',
       avatar: '',
     },
     products: [
@@ -261,7 +261,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 07',
-    logoUrl: 'https://drive.google.com/file/d/1syVsOqrJn1Dgj1f88JwQ-b5t0Y9DppMA/view?usp=drive_link',
+    logoUrl: '/logos/Rocketbaby.jpg',
   },
   {
     id: '08',
@@ -308,7 +308,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
       'Confeccionamos prendas de dormir para toda la familia, combinando comodidad, diseño y calidad en cada detalle. Somos fabricantes y seleccionamos telas de excelente calidad, suaves, frescas y agradables al tacto, pensadas para brindar descanso y bienestar.',
     founder: {
       name: 'Catalina Martinez',
-      role: 'Fundadora y Directora General',
+      role: '',
       avatar: '',
     },
     products: ['Pijamas para toda la familia', 'Camisetas', 'Hoddies'],
@@ -329,13 +329,13 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 09',
-    logoUrl: 'https://drive.google.com/file/d/10786_cXztkqWXMB0bsGE31HDQMWR5QOr/view?usp=drive_link',
+    logoUrl: '/logos/Mersaki.jpg',
   },
   {
     id: '10',
     standNumber: '10',
     name: 'Blar Beauty',
-    slogan: 'Blar Beauty es una tienda de maquillaje, accesorios y también cuidado facial.',
+    slogan: '',
     category: 'Belleza',
     categoryColor: '#db2777',
     badgeBg: '#fce7f3',
@@ -343,7 +343,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
       'Blar Beauty es una tienda de maquillaje, accesorios y productos de cuidado facial, donde ofrecemos productos de belleza seleccionados para diferentes necesidades y gustos. Buscamos que nuestros clientes no solo encuentren productos que les gusten, sino que también conozcan cómo utilizarlos y cuáles son los más adecuados para ellos.',
     founder: {
       name: 'Lenis Valentina Aroca Rincon',
-      role: 'Fundadora & CEO',
+      role: '',
       avatar: '',
     },
     products: [
@@ -376,7 +376,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 10',
-    logoUrl: 'https://drive.google.com/file/d/1QxBDdiyyOTsBnNkrGBcpsj6CFh-XGm6l/view?usp=drive_link',
+    logoUrl: '/logos/Blarbeauty.jpg',
   },
   {
     id: '11',
@@ -390,7 +390,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
       'Somos una marca dedicada al cuidado personal y la belleza, con una propuesta multimarca que reúne diferentes productos pensados para consentirte y resaltar tu bienestar. Además, elaboramos nuestras propias mantequillas artesanales “Eres Magia”, creadas con dedicación y enfocadas en brindar una experiencia especial para la piel.',
     founder: {
       name: 'Valentina Correa ',
-      role: 'Fundadora y Gerente General',
+      role: '',
       avatar: '',
     },
     products: [
@@ -415,7 +415,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 11',
-    logoUrl: 'https://drive.google.com/file/d/1tTphI2Bn1aiaDu1QCeb9RgH4IapDIKwq/view?usp=drive_link',
+    logoUrl: '/logos/EresMagia.jpg',
   },
   {
     id: '12',
@@ -429,7 +429,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
       'Engomecepex es un emprendimiento de diseño e ilustración que transforma ideas, personajes y referentes culturales en productos coleccionables y souvenirs. Creamos pines;llaveros;mini CDs;sticker;figuras en 3d;ilustraciones únicas. ',
     founder: {
       name: 'Yule Castillo ',
-      role: 'Fundadora y Directora General ',
+      role: '',
       avatar: '',
     },
     products: ['Pines', 'Llaveros', 'Mini CDs', 'Sticker', 'Figuras en 3d', 'Ilustraciones únicas'],
@@ -450,13 +450,13 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 12',
-    logoUrl: 'https://drive.google.com/file/d/1UkbsVes03g41p2tGrNuX6FTykUKQm0mG/view?usp=drive_link',
+    logoUrl: '/logos/engomecepex.jpg',
   },
   {
     id: '13',
     standNumber: '13',
     name: 'OSADÍA',
-    slogan: 'Emprendimiento de accesorios que busca complementar el estilo y la personalidad de cada persona. ',
+    slogan: '',
     category: 'Moda y accesorios',
     categoryColor: '#3b82f6',
     badgeBg: '#eff6ff',
@@ -464,7 +464,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
       'Ofrecemos accesorios modernos, versátiles y con un toque de elegancia, pensados para mujeres y hombres que quieren expresar su esencia y atreverse a destacar. ✨',
     founder: {
       name: 'Nicol Guzman Gomez',
-      role: 'Fundadora & CEO',
+      role: '',
       avatar: '',
     },
     products: ['Gafas', 'Joyas', 'Pañoletas', 'Pinzas', 'Gorras'],
@@ -484,7 +484,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 13',
-    logoUrl: 'https://drive.google.com/file/d/1fNwWSFsqPYlWgKAtVano2NJABP-PXB4t/view?usp=drive_link',
+    logoUrl: '/logos/Osadia.jpg',
   },
   {
     id: '14',
@@ -498,7 +498,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
       'Nuestro emprendimiento busca ayudar a los jóvenes a sentirse identificados con sus gustos personales sin miedo a ser juzgados, portando prendas de vestir, accesorios y artículos de series anime de su preferencia, siempre dando un asesoramiento no como una empresa sino como un amigo, tal y como nuestra Marca indica Tomodachi (Amigo) Otaku (persona que gusta de series de anime), buscando la comodidad de nuestros clientes y total sinceridad en nuestros consejos.',
     founder: {
       name: 'Luna Estefanía Bolívar Ortiz ',
-      role: 'Fundadora & CEO',
+      role: '',
       avatar: '',
     },
     products: ['Peluches', 'Pines', 'Llaveros', 'Bisutería', 'Figuras cultura Geek y K-Pop'],
@@ -518,13 +518,13 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 14',
-    logoUrl: 'https://drive.google.com/file/d/1vVYB3wY2cHu22Cgqs5-5sQZsPvAV2Y5P/view?usp=sharing',
+    logoUrl: '/logos/tomodachi.otaku.jpg',
   },
   {
     id: '15',
     standNumber: '15',
     name: 'LORMI ',
-    slogan: 'Ropa para dama y caballero actual y moderna',
+    slogan: '',
     category: 'Moda y accesorios',
     categoryColor: '#10b981',
     badgeBg: '#d1fae5',
@@ -532,7 +532,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
       'Vendemos ropa para dama y caballero actual y moderna, busos con diseños personalizados y artesanias a partir de materiales textiles',
     founder: {
       name: 'Lorena Urrego ',
-      role: 'Fundadora',
+      role: '',
       avatar: '',
     },
     products: [
@@ -557,7 +557,7 @@ export const INITIAL_EXHIBITORS: Exhibitor[] = [
     ],
     schedule: [],
     spaceType: 'Stand 15',
-    logoUrl: 'https://drive.google.com/file/d/1pAi1h4jaPKivnJ1lyLgXDiXmamKV188E/view?usp=drive_link',
+    logoUrl: '/logos/Lormi.jpg',
   },
 ];
 
@@ -706,7 +706,7 @@ export const RIGHT_LEGEND_ITEMS = [
   { id: '15', y: 718 },
 ];
 
-export const STORAGE_KEY = 'feria_emprendimiento_exhibitors_v9';
+export const STORAGE_KEY = 'feria_emprendimiento_exhibitors_v11';
 
 export function getStoredExhibitors(): Exhibitor[] {
   if (typeof window === 'undefined') return INITIAL_EXHIBITORS;
@@ -725,11 +725,23 @@ export function getStoredExhibitors(): Exhibitor[] {
         const init = INITIAL_EXHIBITORS.find((e) => e.id === item.id);
         const normStand = (item.standNumber || item.id || '').trim().padStart(2, '0');
         const defaultLogo = EXHIBITOR_DEFAULT_LOGOS[normStand] || EXHIBITOR_DEFAULT_LOGOS[item.standNumber] || init?.logoUrl;
+        
+        // Ensure any Google Drive links or missing logos are converted to local static logo
+        const isDrive = item.logoUrl && (item.logoUrl.includes('drive.google.com') || item.logoUrl.includes('googleusercontent.com'));
+        const safeLogo = (!item.logoUrl || isDrive) ? (init?.logoUrl || defaultLogo || '') : item.logoUrl;
+
         return {
           ...init,
           ...item,
+          slogan: item.slogan !== undefined ? item.slogan : (init?.slogan || ''),
+          description: item.description !== undefined ? item.description : (init?.description || ''),
           category: (item.category !== undefined ? item.category : (init?.category || '')) as Exhibitor['category'],
-          logoUrl: item.logoUrl || defaultLogo || init?.logoUrl,
+          logoUrl: safeLogo,
+          founder: {
+            ...init?.founder,
+            ...item.founder,
+            role: item.founder?.role || init?.founder?.role || '',
+          },
           contact: {
             ...init?.contact,
             ...item.contact,

@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Exhibitor } from '../types';
-import { EXHIBITOR_DEFAULT_LOGOS, EXHIBITOR_NAME_LOGOS } from '../data/exhibitorLogos';
+import { EXHIBITOR_DEFAULT_LOGOS, EXHIBITOR_NAME_LOGOS, LOGO_ALTERNATIVES } from '../data/exhibitorLogos';
 
 interface ExhibitorLogoProps {
   exhibitor: Partial<Exhibitor> & {
+    id?: string;
     name?: string;
-    standNumber: string;
+    standNumber?: string;
     categoryColor?: string;
     badgeBg?: string;
     logoUrl?: string;
@@ -27,7 +28,7 @@ const SIZE_MAP = {
 /**
  * Resolves logo URLs supporting:
  * - Direct static files from /logos/... and /Logo_CUN.svg
- * - Automatic mapping from standNumber or exhibitor name
+ * - Automatic mapping from standNumber, stand id, or exhibitor name
  * - User uploaded base64 data URLs
  * - Graceful replacement of Google Drive links with the local logo file
  */
@@ -58,7 +59,7 @@ export function resolveLogoUrl(url?: string, standNumber?: string, name?: string
     return defaultMapped || trimmed;
   }
 
-  // If it's a bare filename without path
+  // If it's a bare filename without path (e.g. "Osadia.jpg" or "Mathu.jpg")
   if (/^([a-zA-Z0-9_\-\.\s]+)\.(jpg|jpeg|png|svg|webp)$/i.test(trimmed) && !trimmed.startsWith('/')) {
     return `/logos/${trimmed}`;
   }
@@ -77,27 +78,40 @@ export const ExhibitorLogo: React.FC<ExhibitorLogoProps> = ({
   className = '',
   showStandNumber = false,
 }) => {
-  const normStand = (exhibitor.standNumber || '').trim().padStart(2, '0');
-  const bareStand = (exhibitor.standNumber || '').trim().replace(/^0+/, '');
+  const standNum = exhibitor.standNumber || exhibitor.id || '';
+  const normStand = standNum.trim().padStart(2, '0');
+  const bareStand = standNum.trim().replace(/^0+/, '');
   const normName = (exhibitor.name || '').trim().toLowerCase();
+  
   const defaultMapped =
     (normStand ? EXHIBITOR_DEFAULT_LOGOS[normStand] : undefined) ||
     (bareStand ? EXHIBITOR_DEFAULT_LOGOS[bareStand] : undefined) ||
     (normName ? EXHIBITOR_NAME_LOGOS[normName] : undefined);
 
   const effectiveLogoUrl = useMemo(() => {
-    return resolveLogoUrl(exhibitor.logoUrl, exhibitor.standNumber, exhibitor.name);
-  }, [exhibitor.logoUrl, exhibitor.standNumber, exhibitor.name]);
+    return resolveLogoUrl(exhibitor.logoUrl, standNum, exhibitor.name);
+  }, [exhibitor.logoUrl, standNum, exhibitor.name]);
 
   const [currentSrc, setCurrentSrc] = useState<string | undefined>(effectiveLogoUrl);
+  const [altIndex, setAltIndex] = useState<number>(0);
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     setCurrentSrc(effectiveLogoUrl);
+    setAltIndex(0);
     setHasError(false);
   }, [effectiveLogoUrl]);
 
   const handleImageError = () => {
+    // If we have alternative filenames in LOGO_ALTERNATIVES, try them first
+    if (currentSrc && LOGO_ALTERNATIVES[currentSrc] && altIndex < LOGO_ALTERNATIVES[currentSrc].length) {
+      const nextAlt = LOGO_ALTERNATIVES[currentSrc][altIndex];
+      setAltIndex((prev) => prev + 1);
+      setCurrentSrc(nextAlt);
+      return;
+    }
+
+    // Try defaultMapped if not already tried
     if (currentSrc !== defaultMapped && defaultMapped) {
       setCurrentSrc(defaultMapped);
     } else {
@@ -113,10 +127,11 @@ export const ExhibitorLogo: React.FC<ExhibitorLogoProps> = ({
       .filter(Boolean)
       .slice(0, 2)
       .map((w) => w[0]?.toUpperCase() || '')
-      .join('') || exhibitor.standNumber;
+      .join('') || exhibitor.standNumber || exhibitor.id || 'ST';
 
   const sizeClasses = SIZE_MAP[size] || SIZE_MAP.md;
   const categoryColor = exhibitor.categoryColor || '#3b82f6';
+  const safeSrc = currentSrc ? encodeURI(currentSrc) : undefined;
 
   return (
     <div className={`relative shrink-0 ${className}`}>
@@ -126,10 +141,10 @@ export const ExhibitorLogo: React.FC<ExhibitorLogoProps> = ({
           boxShadow: '0 2px 8px -2px rgba(0,0,0,0.08)',
         }}
       >
-        {currentSrc && !hasError ? (
+        {safeSrc && !hasError ? (
           <img
-            src={currentSrc}
-            alt={name ? `Logo de ${name}` : `Stand ${exhibitor.standNumber}`}
+            src={safeSrc}
+            alt={name ? `Logo de ${name}` : `Stand ${standNum}`}
             className="w-full h-full object-contain p-1"
             onError={handleImageError}
             loading="eager"
@@ -147,14 +162,15 @@ export const ExhibitorLogo: React.FC<ExhibitorLogoProps> = ({
         )}
       </div>
 
-      {showStandNumber && (
+      {showStandNumber && standNum && (
         <span
           className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-md text-[9px] font-black text-white shadow-xs border border-white/60 leading-none"
           style={{ backgroundColor: categoryColor }}
         >
-          {exhibitor.standNumber}
+          {standNum}
         </span>
       )}
     </div>
   );
 };
+
